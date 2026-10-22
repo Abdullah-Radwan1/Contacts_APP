@@ -1,0 +1,65 @@
+<main class="page-shell">
+  <section class="contacts-panel" aria-labelledby="page-title">
+    <header class="page-header">
+      <div class="eyebrow">DIRECTORY</div>
+      <h1 id="page-title">Contacts</h1>
+      <p class="subtitle">A quick look at the people in your network.</p>
+    </header>
+
+    @if (loading()) {
+      <p class="message" role="status">Loading contacts…</p>
+    } @else if (error()) {
+      <p class="message error" role="alert">{{ error() }}</p>
+    } @else {
+      <div class="list-heading">
+        <h2>All contacts</h2>
+        <span class="contact-count">{{ totalItems() }} contacts</span>
+      </div>
+
+      @if (contacts().length > 0) {
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Email address</th>
+                <th scope="col">Phone number</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (contact of contacts(); track contact.email) {
+                <tr>
+                  <td class="name-cell">{{ contact.name }}</td>
+                  <td>{{ contact.email }}</td>
+                  <td>{{ contact.phone }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      } @else {
+        <p class="message">There are no contacts to display.</p>
+      }
+
+      @if (totalPages() > 1) {
+        <nav class="pagination" aria-label="Contacts pages">
+          <button
+            type="button"
+            (click)="loadPage(page() - 1)"
+            [disabled]="loading() || page() <= 1"
+          >
+            Previous
+          </button>
+          <span aria-live="polite">Page {{ page() }} of {{ totalPages() }}</span>
+          <button
+            type="button"
+            (click)="loadPage(page() + 1)"
+            [disabled]="loading() || page() >= totalPages()"
+          >
+            Next
+          </button>
+        </nav>
+      }
+    }
+  </section>
+</main>
